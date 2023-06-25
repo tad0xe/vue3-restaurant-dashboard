@@ -18,3 +18,4 @@ npm run build
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 "# vue3-restaurant-dashboard" 
+"# vue3-restaurant-dashboard" 
