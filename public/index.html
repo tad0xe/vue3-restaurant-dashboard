@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Eatio - Restaurant Food Order Bootstrap Admin Dashboard</title>
+  <!-- Favicon icon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon.png">
+  <link href="frontend/css/style.css" rel="stylesheet">
+  <link href="frontend/vendor/jqvmap/css/jqvmap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="frontend/vendor/chartist/css/chartist.min.css">
+  <link href="frontend/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+  <link href="frontend/vendor/dropzone/dist/dropzone.css" rel="stylesheet">
+  <link href="https://cdn.lineicons.com/2.0/LineIcons.css" rel="stylesheet">
+	<script src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.27.0/dist/apexcharts.min.js"></script>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+	<div id="app"></div>
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <!-- built files will be auto injected -->
+	<script src="frontend/vendor/global/global.min.js"></script>
+	<script src="frontend/vendor/jqueryui/js/jquery-ui.min.js"></script>
+	<script src="frontend/vendor/moment/moment.min.js"></script>
+
+	<script src="frontend/vendor/fullcalendar/js/fullcalendar.min.js"></script>
+	<script src="frontend/js/plugins-init/fullcalendar-init.js"></script>
+  <script src="frontend/vendor/chart.js/Chart.bundle.min.js"></script>
+  <script src="frontend/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+  <script src="frontend/js/custom.min.js"></script>
+  <script src="frontend/js/deznav-init.js"></script>
+  <script src="frontend/vendor/waypoints/jquery.waypoints.min.js"></script>
+    <script src="frontend/vendor/jquery.counterup/jquery.counterup.min.js"></script>
+    <script src="frontend/vendor/highlightjs/highlight.pack.min.js"></script>
+  	<script src="frontend/vendor/owl-carousel/owl.carousel.js"></script>
+	<!-- Datatable -->
+  <script src="frontend/vendor/datatables/js/jquery.dataTables.min.js"></script>
+	<!-- Apex Chart -->
+
+
+	<!-- Chart piety plugin files -->
+	<script src="frontend/vendor/peity/jquery.peity.min.js"></script>
+
+	<!-- Dashboard 1 -->
+  <script src="frontend/js/dashboard/dashboard-1.js"></script>
+  <script>
+		function widgetCarousel()
+		{
+
+			/*  testimonial one function by = owl.carousel.js */
+			jQuery('.widget-carousel').owlCarousel({
+				loop:false,
+				margin:30,
+				nav:true,
+				autoplaySpeed: 3000,
+				navSpeed: 3000,
+				paginationSpeed: 3000,
+				slideSpeed: 3000,
+				smartSpeed: 3000,
+				autoplay: false,
+				dots: false,
+				navText: ['<i class="fa fa-caret-left"></i>', '<i class="fa fa-caret-right"></i>'],
+				responsive:{
+					0:{
+						items:1
+					},
+
+					480:{
+						items:2
+					},
+
+					1200:{
+						items:3
+					},
+					1750:{
+						items:4
+					}
+				}
+			})
+		}
+		function carouselReview(){
+			/*  testimonial one function by = owl.carousel.js */
+			jQuery('.testimonial-one').owlCarousel({
+				loop:true,
+				autoplay:true,
+				margin:0,
+				nav:false,
+				dots: false,
+				navText: [''],
+				responsive:{
+					0:{
+						items:1
+					},
+
+					480:{
+						items:1
+					},
+
+					767:{
+						items:1
+					},
+					1000:{
+						items:1
+					}
+				}
+			})
+			/*Custom Navigation work*/
+			jQuery('#next-slide').on('click', function(){
+			   $('.testimonial-one').trigger('next.owl.carousel');
+			});
+
+			jQuery('#prev-slide').on('click', function(){
+			   $('.testimonial-one').trigger('prev.owl.carousel');
+			});
+			/*Custom Navigation work*/
+		}
+
+		jQuery(window).on('load',function(){
+			setTimeout(function(){
+				widgetCarousel();
+				carouselReview();
+			}, 1000);
+		});
+	</script>
+  <script>
+    (function($) {
+
+      var table = $('#example5').DataTable({
+        searching: false,
+        paging:true,
+        select: false,
+        //info: false,
+        lengthChange:false
+
+      });
+      $('#example tbody').on('click', 'tr', function () {
+        var data = table.row( this ).data();
+
+      });
+
+    })(jQuery);
+    </script>
+</body>
+
+</html>
