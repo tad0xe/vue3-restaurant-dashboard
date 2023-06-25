@@ -24,11 +24,11 @@
                 <div class="dropdown-menu">
                   <a
                     class="dropdown-item"
-                   @click="sortByNewest"
+                    @click="sortByNewest"
                   >Latest</a>
                   <a
                     class="dropdown-item"
-                   @click="sortByOldest"
+                    @click="sortByOldest"
                   >OLD</a>
                 </div>
               </div>
@@ -36,7 +36,8 @@
             <div class="card-body p-0">
               <div
                 class="media review-box"
-               v-for="review in sortedReviews" :key="review.id"
+                v-for="review in sortedReviews"
+                :key="review.id"
               >
                 <img
                   class="mr-3 img-fluid btn-rounded"
@@ -48,16 +49,21 @@
                   <h4 class="mt-0 mb-0 text-black">{{review.user.name}}</h4>
                   <ul class="review-meta mb-3 d-block d-sm-flex align-items-center">
                     <li class=""><small>{{ review.formattedTime }}</small></li>
-                    <li class="ml-auto"><span class="badge badge-rounded badge-warning light font-w500"><div v-if="review.rating === 5">Excellent</div>
-<div v-if="review.rating === 4">Very Good</div>
-<div v-if="review.rating === 3">Good</div>
-<div v-if="review.rating === 2">Fair</div>
-<div v-if="review.rating === 1">Poor</div></span></li>
+                    <li class="ml-auto"><span class="badge badge-rounded badge-warning light font-w500">
+                        <div v-if="review.rating === 5">Excellent</div>
+                        <div v-if="review.rating === 4">Very Good</div>
+                        <div v-if="review.rating === 3">Good</div>
+                        <div v-if="review.rating === 2">Fair</div>
+                        <div v-if="review.rating === 1">Poor</div>
+                      </span></li>
                   </ul>
                   <p class="mb-3 text-secondary">{{review.body}}</p>
                 </div>
                 <div class="media-footer d-flex align-self-center">
-                  <div v-for="star in 5" class="">
+                  <div
+                    v-for="star in 5"
+                    class=""
+                  >
                     <i
                       class="fa fa-star"
                       :class="{ 'text-orange': star <= review.rating }"
@@ -69,7 +75,8 @@
             </div>
             <div class="card-footer border-0 text-center py-4">
               <a
-                @click="showMoreReviews" v-if="showMoreButton"
+                @click="showMoreReviews"
+                v-if="showMoreButton"
                 class="btn btn-primary"
               >Read More <i class="fa fa-angle-double-down scale2 ml-2"></i></a>
             </div>
@@ -98,13 +105,15 @@ export default {
       }));
     },
     sortedReviews() {
-      return this.formattedReviews.slice(0, this.displayedCount).sort((a, b) => {
-        if (this.sortOrder === "newest") {
-          return new Date(b.time) - new Date(a.time);
-        } else {
-          return new Date(a.time) - new Date(b.time);
-        }
-      });
+      return this.formattedReviews
+        .slice(0, this.displayedCount)
+        .sort((a, b) => {
+          if (this.sortOrder === "newest") {
+            return new Date(b.time) - new Date(a.time);
+          } else {
+            return new Date(a.time) - new Date(b.time);
+          }
+        });
     },
     showMoreButton() {
       return this.displayedCount < this.getReviews.length;
