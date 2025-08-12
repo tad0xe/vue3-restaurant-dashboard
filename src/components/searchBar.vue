@@ -45,7 +45,7 @@ export default {
   methods: {
     async performSearch() {
       try {
-        const response = await axios.post("https://restaurant-n54j.onrender.com/api/search", {
+        const response = await axios.post("https://event-ticket-qa70.onrender.com/api/search", {
           title: this.searchQuery
         });
        // console.log(response)
@@ -58,3 +58,13 @@ export default {
   }
 };
 </script>
+
+
+<style scoped>
+.product-card {
+  border: 1px solid #ddd;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+}
+</style>

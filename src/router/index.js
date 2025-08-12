@@ -7,10 +7,13 @@ import GoogleLoginCallback from '@/components/views/GoogleLoginCallback.vue';
 
 
 
-const routes = [{
-  path: "/",
-  name: "home",
-  component: HomeView,
+const routes = [,
+{
+  path:'/',
+  name: 'home',
+  component: () => import(/* webpackChunkName: "about" */ '../components/views/Home.vue')
+  
+  
 },
 {
   path: '/about',
@@ -21,11 +24,11 @@ const routes = [{
   component: () => import(/* webpackChunkName: "about" */ '../components/views/AboutView.vue')
 },
 {
-  path: "/all-products",
-  name: "Homeview",
-  component: () =>
-    import( /* webpackChunkName: "about" */ "../components/views/HomeView.vue")
+path: '/how-it-works',
+name: 'work',
+component: () => import(/* webpackChunkName: "about" */ '../components/views/Work.vue')
 },
+
 {
   path: '/auth/google/callback',
   component: GoogleLoginCallback,
@@ -35,60 +38,85 @@ const routes = [{
 {
   path: "/dash",
   name: "dash",
-  beforeEnter: isAdmin,
+    //   beforeEnter: isAdmin,
   component: () =>
     import( /* webpackChunkName: "about" */ "../components/dash.vue")
 },
 
 {
-  path: "/email/draft",
-  name: "draft",
+  path: "/admin/orders",
+  name: "orders",
   // route level code-splitting
   // this generates a separate chunk (about.[hash].js) for this route
   // which is lazy-loaded when the route is visited.
   component: () =>
-    import( /* webpackChunkName: "about" */ "../components/app/email/draft.vue")
+    import( /* webpackChunkName: "about" */ "../components/app/admin/orders.vue")
 },
 {
-  path: "/email/trash",
-  name: "trash",
+  path: "/admin/categories",
+  name: "category",
   // route level code-splitting
   // this generates a separate chunk (about.[hash].js) for this route
   // which is lazy-loaded when the route is visited.
   component: () =>
-    import( /* webpackChunkName: "about" */ "../components/app/email/trash.vue")
+    import( /* webpackChunkName: "about" */ "../components/app/admin/category.vue")
 },
 {
-  path: "/email/important",
-  name: "important",
+  path: "/admin/products",
+  name: "products",
   // route level code-splitting
   // this generates a separate chunk (about.[hash].js) for this route
   // which is lazy-loaded when the route is visited.
   component: () =>
-    import( /* webpackChunkName: "about" */ "../components/app/email/important.vue")
+    import( /* webpackChunkName: "about" */ "../components/app/admin/products.vue")
 },
 {
-  path: "/email/sent",
-  name: "sent",
+  path: "/admin/users",
+  name: "users",
   // route level code-splitting
   // this generates a separate chunk (about.[hash].js) for this route
   // which is lazy-loaded when the route is visited.
   component: () =>
-    import( /* webpackChunkName: "about" */ "../components/app/email/sent.vue")
+    import( /* webpackChunkName: "about" */ "../components/app/admin/users.vue")
 },
 {
-  path: "/email/inbox",
+  path: "/admin/scanner",
+  name: "scanner",
+  // route level code-splitting
+  // this generates a separate chunk (about.[hash].js) for this route
+  // which is lazy-loaded when the route is visited.
+  component: () =>
+    import( /* webpackChunkName: "about" */ "../components/app/admin/scanner.vue")
+},
+
+{
+  path: "/admin/inbox",
   name: "inbox",
   // route level code-splitting
   // this generates a separate chunk (about.[hash].js) for this route
   // which is lazy-loaded when the route is visited.
   component: () =>
-    import( /* webpackChunkName: "about" */ "../components/app/email/inbox.vue")
+    import( /* webpackChunkName: "about" */ "../components/app/admin/users.vue")
+},
+  {
+    path: "/categories/:categoryType",
+    name: "category-products",
+
+    component: () =>
+      import(
+        /* webpackChunkName: "about" */ "../components/CategoryProducts.vue"
+      ),
+  },
+{
+  path: '/payment-success',
+  name: 'PaymentSuccess',
+  component: () => import('@/components/PaymentSuccess.vue'),
 },
 
+
 {
-  path: "/payment",
-  name: "payment",
+  path: "/checkout",
+  name: "checkout",
   // route level code-splitting
   // this generates a separate chunk (about.[hash].js) for this route
   // which is lazy-loaded when the route is visited.
@@ -146,7 +174,7 @@ const routes = [{
 },
 
 {
-  path: "/product/:id",
+  path: "/product",
   name: "product",
   // route level code-splitting
   // this generates a separate chunk (about.[hash].js) for this route
@@ -154,7 +182,15 @@ const routes = [{
   component: () =>
     import( /* webpackChunkName: "about" */ "../components/Product.vue")
 },
-
+ {
+    path: "/product/:title",
+    name: 'ProductDetails',
+    props: true,
+    component: () =>
+      import(
+        /* webpackChunkName: "about" */ "../components/Product.vue"
+      ),
+  },
 {
   name: "address",
   path: "/address",
@@ -185,15 +221,12 @@ const routes = [{
 
 },
 {
-  path: "/dum",
-  name: "dum",
-  // route level code-splitting
-  // this generates a separate chunk (about.[hash].js) for this route
-  // which is lazy-loaded when the route is visited.
- // beforeEnter: isAdmin,
+  path: "/events",
+  name: "events",
   component: () =>
-    import( /* webpackChunkName: "about" */ "../components/dum.vue")
+    import( /* webpackChunkName: "about" */ "../components/events.vue")
 },
+
 {
   path: "/rex",
   name: "rex",
@@ -201,7 +234,7 @@ const routes = [{
   // this generates a separate chunk (about.[hash].js) for this route
   // which is lazy-loaded when the route is visited.
 
-  beforeEnter: isAdmin,
+      //  beforeEnter: isAdmin,
   component: () =>
     import( /* webpackChunkName: "about" */ "../components/rex.vue")
 },

@@ -3,7 +3,7 @@
 import {
   createStore
 } from 'vuex'
-
+import createPersistedState from "vuex-persistedstate";
 import orders from './modules/orders'
 import products from './modules/products'
 import auth from './modules/auth'
@@ -12,7 +12,6 @@ import revenue from './modules/revenue'
 import visit from './modules/visits'
 import reviews from './modules/reviews'
 import address from './modules/address'
-//import createPersistedState from "vuex-persistedstate";
 
 
 
@@ -20,7 +19,7 @@ import address from './modules/address'
 
 
 export default createStore({
-  // plugins: [createPersistedState()],
+  plugins: [createPersistedState()],
 
   modules: {
     orders,

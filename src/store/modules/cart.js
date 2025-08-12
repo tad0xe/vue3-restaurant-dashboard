@@ -2,14 +2,45 @@ import axios from "axios";
 
 const state = {
   cart: [],
+    selectedTickets: [],
   cartLength: 0,
   shippingPrice: 0,
+  cartTotal: 0,
   shippingEstimatedDelivery: "",
-
-//  token: localStorage.getItem("token") || ""
+  productUrl: "",
+  selectedCountry: "", // Store country name
+  selectedState: "", // Store state name
+  selectedCity: "",
+  selectedName: "", // Store city name
+  selectedAddress: "", // Store address name
+  seletedPhone: "",
 };
 
 const getters = {
+    getSelectedTickets(state) {
+    return state.selectedTickets;
+  },
+   getCartTotal(state) {
+    return state.cart.reduce((sum, product) => {
+      const ticketTotal = product.event.tickets.reduce((innerSum, ticket) => {
+        return (
+          innerSum + (ticket.selectedQuantity || 0) * (ticket.price || 0)
+        );
+      }, 0);
+      return sum + ticketTotal;
+    }, 0);
+  },
+    getDeliveryInfo(state) {
+    return {
+      country: state.selectedCountry,
+      state: state.selectedState,
+      city: state.selectedCity,
+      name: state.selectedName,
+      address: state.selectedAddress,
+      phone: state.seletedPhone,
+    };
+  },
+  getProductUrl: (state) => state.productUrl,
 
   getCartLength(state) {
     return state.cartLength;
@@ -19,7 +50,7 @@ const getters = {
   },
   getCartTotalPrice(state) {
     let total = 0;
-    state.cart.map(product => {
+    state.cart.map((product) => {
       total += product.price * product.quantity;
     });
 
@@ -27,7 +58,7 @@ const getters = {
   },
   getCartTotalPriceWithShipping(state) {
     let total = 0;
-    state.cart.map(product => {
+    state.cart.map((product) => {
       total += product.price * product.quantity;
     });
 
@@ -36,40 +67,74 @@ const getters = {
   getEstimatedDelivery(state) {
     return state.shippingEstimatedDelivery;
   },
-  getShippingPrice(state) {
-    return state.shippingPrice;
-  },
-
-
+  isLoggedIn: (state) => !!state.token,
+  authStatus: (state) => state.status,
 };
 
 const actions = {
-  addProductToCart({ state, commit }, product) {
-    const cartProduct = state.cart.find(prod => prod._id === product._id);
+  saveDeliveryInfo({ commit }, formData) {
+    commit("setDeliveryInfo", formData);
+  },
+   calculateCartTotal({ commit, state }) {
+    const total = state.cart.reduce((sum, product) => {
+      const ticketTotal = product.event.tickets.reduce((innerSum, ticket) => {
+        return (
+          innerSum + (ticket.selectedQuantity || 0) * (ticket.price || 0)
+        );
+      }, 0);
+      return sum + ticketTotal;
+    }, 0);
 
-    if (!cartProduct) {
-      commit("pushProductToCart", product);
-    } else {
-      commit("incrementProductQty", cartProduct);
-    }
-
-    commit("incrementCartLength");
+    commit("SET_CART_TOTAL", total);
+  },
+  setProductUrl({ commit }, url) {
+    commit("setProductUrl", url);
+  },
+addProductToCart({ state, commit }, product) {
+  // Ensure product has a unique ID if not already set
+  if (!product._id) {
+    product._id = `${product.title}-${Date.now()}`;
   }
+
+  // Clear existing cart (only one item allowed)
+  commit("clearCart");
+
+  // Add the new product with quantity 1
+  commit("pushProductToCart", { ...product, quantity: 1 });
+  commit("setCartLength", 1); // explicitly set cart length to 1
+
+  console.log("cart (only one item):", state.cart);
+},
+
+  clearCart({ commit }) {
+    commit("clearCart");
+  },
 };
 
 const mutations = {
-  set_login(state) {
-    state.logged = !state.logged;
+   setSelectedTickets(state, tickets) {
+    state.selectedTickets = tickets;
   },
+  SET_CART_TOTAL(state, total) {
+    state.cartTotal = total;
+  },
+  setDeliveryInfo(state, payload) {
+    state.selectedCountry = payload.selectedCountry;
+    state.selectedState = payload.selectedState;
+    state.selectedCity = payload.selectedCity;
+    state.selectedName = payload.selectedName;
+    state.selectedAddress = payload.selectedAddress;
+    state.seletedPhone = payload.selectedPhone;
+  },
+  setProductUrl(state, url) {
+    state.productUrl = url;
+  },
+
   pushProductToCart(state, product) {
     product.quantity = 1;
     state.cart.push(product);
-    this.commit('saveCart');
+  },
 
-  },
-  saveCart(state) {
-    window.localStorage.setItem("product", JSON.stringify(state.product));
-  },
   incrementProductQty(state, product) {
     product.quantity++;
     let indexOfProduct = state.cart.indexOf(product);
@@ -79,7 +144,7 @@ const mutations = {
   incrementCartLength(state) {
     state.cartLength = 0;
     if (state.cart.length > 0) {
-      state.cart.map(product => {
+      state.cart.map((product) => {
         state.cartLength += product.quantity;
       });
     }
@@ -91,12 +156,12 @@ const mutations = {
       4. replace the old product with the updated product
       */
   changeQty(state, { product, qty }) {
-    let cartProduct = state.cart.find(prod => prod._id === product._id);
+    let cartProduct = state.cart.find((prod) => prod._id === product._id);
     cartProduct.quantity = qty;
 
     state.cartLength = 0;
     if (state.cart.length > 0) {
-      state.cart.map(product => {
+      state.cart.map((product) => {
         state.cartLength += product.quantity;
       });
     }
@@ -114,10 +179,7 @@ const mutations = {
     let indexOfProduct = state.cart.indexOf(product);
     state.cart.splice(indexOfProduct, 1);
   },
-  setShipping(state, { price, estimatedDelivery }) {
-    state.shippingPrice = price;
-    state.shippingEstimatedDelivery = estimatedDelivery;
-  },
+
   setShipping(state, { price, estimatedDelivery }) {
     state.shippingPrice = price;
     state.shippingEstimatedDelivery = estimatedDelivery;
@@ -129,12 +191,11 @@ const mutations = {
     state.shippingPrice = 0;
     state.shippingEstimatedDelivery = "";
   },
-
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

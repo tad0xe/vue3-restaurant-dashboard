@@ -71,33 +71,31 @@ export default {
       // Calculate total order price for each user
       const userOrderTotals = {};
 
-      this.orders.forEach(order => {
-        const userId = order.owner;
-        const totalPrice = order.products.reduce((total, product) => {
-          return total + product.totalPrice;
-        }, 0);
+  this.orders.forEach(order => {
+  const userId = order.owner;
 
-        if (userOrderTotals.hasOwnProperty(userId)) {
-          userOrderTotals[userId] += totalPrice;
-        } else {
-          userOrderTotals[userId] = totalPrice;
-        }
-      });
+  const totalPrice = Array.isArray(order.products)
+    ? order.products.reduce((total, product) => {
+        return total + (product.totalPrice || 0);
+      }, 0)
+    : 0;
+
+  if (userOrderTotals.hasOwnProperty(userId)) {
+    userOrderTotals[userId] += totalPrice;
+  } else {
+    userOrderTotals[userId] = totalPrice;
+  }
+});
+
 
       return userOrderTotals;
     }
   },
   mounted() {
-    this.fetchUsersWithAddresses();
-    this.$store.dispatch("fetchOrders");
-    this.$store.dispatch("fetchUsers");
+ 
   },
   methods: {
-    fetchUsersWithAddresses() {
-      this.$store.dispatch("fetchUsersWithAddresses").catch(error => {
-        console.log(error);
-      });
-    },
+  
     getLastOrderPrice(userId) {
       const userOrders = this.orders.filter(order => order.owner === userId);
       if (userOrders.length > 0) {

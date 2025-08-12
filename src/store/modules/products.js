@@ -5,12 +5,16 @@ const state = {
     sortedProducts: [],
     likedProducts: [],
     highestSellingProduct: null,
+    productsByUser: [],
 
 
 };
 const mutations = {
     SET_HIGHEST_SELLING_PRODUCT(state, products) {
         state.highestSellingProduct = products;
+    },
+    SET_PRODUCTS_BY_USER(state, products) {
+        state.productsByUser = products;
     },
     SET_PRODUCTS(state, products) {
         state.products = products;
@@ -64,6 +68,18 @@ const actions = {
             .then((response) => {
                 commit('SET_PRODUCTS', response.data.products);
 
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    },
+     fetchProductsByUser({
+        commit
+    }) {
+        return axiosInstance
+            .get('/user/products')
+            .then((response) => {
+                commit('SET_PRODUCTS_BY_USER', response.data.products);
             })
             .catch((error) => {
                 console.error(error);
@@ -150,6 +166,9 @@ const getters = {
         // console.log(state.products.products.length)
         return ((totalProducts / 100));
         //return ((totalProducts / 100) ).toFixed(0);
+    },
+    getProductsByUser(state) {
+        return state.productsByUser;
     },
     getHighestSellingProducts(state) {
         return state.highestSellingProduct;

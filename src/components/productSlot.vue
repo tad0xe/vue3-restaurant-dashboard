@@ -52,7 +52,7 @@ export default {
   async mounted() {
 
     axios
-      .get(`https://restaurant-n54j.onrender.com/api/reviews/${this.$route.params.id}`, {})
+      .get(`https://event-ticket-qa70.onrender.com/api/reviews/${this.$route.params.id}`, {})
       .then(response => {
         //  console.log(response);
         this.reviews = response.data.reviews;

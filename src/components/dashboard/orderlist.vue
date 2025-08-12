@@ -6,149 +6,46 @@
         <div class="mr-auto d-none d-lg-block">
           <h2 class="text-black font-w600 mb-0">Orders</h2>
           <p class="mb-0">Here is your order list data</p>
+       
         </div>
-
       </div>
       <div>
         <div class="filter row align-items-center">
-          <div class="col-auto">
-            <label for="statusFilter">Filter by Status:</label>
-          </div>
-          <div class="col-auto">
-            <select
-              id="statusFilter"
-              v-model="selectedStatus"
-              @change="applyFilters"
-              class="form-select"
-            >
-              <option value="">All</option>
-              <option value="New Order">New Order</option>
-              <option value="on Delivery">On Delivery</option>
-              <option value="delivered">Delivered</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-          </div>
           <div class="col-auto">
             <input
               type="text"
               class="form-control"
               v-model="searchQuery"
               placeholder="Search by Order ID"
-            >
+            />
           </div>
         </div>
 
         <div class="table-container">
-          <table class="custom-table ">
+          <table class="custom-table">
             <thead>
               <tr>
                 <th>Order ID</th>
                 <th>Date</th>
+                <th>name of event</th>
                 <th>Customer Name</th>
-                <th>Deliver to</th>
+                <th>Phone number</th>
                 <th>Amount</th>
-                <th>Status Order</th>
-                <th>Update Status</th>
+
+                <th>Ticket type</th>
               </tr>
             </thead>
-              <tbody class="">
-              <tr
-                v-for="(order, index) in paginatedOrders"
-                :key="order.id"
-              >
+            <tbody class="">
+              <tr v-for="(order, index) in orders" :key="order._id">
                 <td>{{ order._id }}</td>
-                <td>{{ order.created_at }}</td>
-                <td>{{ orderOwnerNames[order.owner] }}</td>
+                <td>{{ new Date(order.createdAt).toLocaleString() }}</td>
+                <td>{{ order.title }}</td>
+                <td>{{ order.contact?.email || "N/A" }}</td>
+                <td>{{ order.contact?.phone || "N/A" }}</td>
+                <td>${{ order.price }}</td>
                 <td>
-                  {{ getUserAddress(order.owner)?.streetAddress || 'N/A' }}
-                </td>
-                <td>
-                  <span
-                    v-for="product in order.products"
-                    :key="product.productID._id"
-                  >
-                    ${{ product.totalPrice }}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    class="btn btn-sm light fs-16"
-                    :class="{
-                  'btn-success': order.status === 'delivered',
-                  'btn-danger': order.status === 'cancelled',
-                  'btn-warning': order.status === 'New Order',
-                  'btn-primary': order.status === 'on Delivery'
-                }"
-                    @click="updateOrderStatus(order._id)"
-                  >
-                    {{ order.status }}
-                  </button>
-                </td>
-                <td>
-                  <div class="dropdown ml-auto text-right">
-                    <div
-                      class="btn-link"
-                      data-toggle="dropdown"
-                    >
-                      <svg
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        version="1.1"
-                      >
-                        <g
-                          stroke="none"
-                          stroke-width="1"
-                          fill="none"
-                          fill-rule="evenodd"
-                        >
-                          <rect
-                            x="0"
-                            y="0"
-                            width="24"
-                            height="24"
-                          ></rect>
-                          <circle
-                            fill="#000000"
-                            cx="5"
-                            cy="12"
-                            r="2"
-                          ></circle>
-                          <circle
-                            fill="#000000"
-                            cx="12"
-                            cy="12"
-                            r="2"
-                          ></circle>
-                          <circle
-                            fill="#000000"
-                            cx="19"
-                            cy="12"
-                            r="2"
-                          ></circle>
-                        </g>
-                      </svg>
-                    </div>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <button
-                        class="btn-success btn btn-sm light fs-4"
-                        @click="updateOrderStatus(order._id, 'delivered')"
-                      >
-                        Delivered
-                      </button>
-                      <button
-                        class="btn-primary btn btn-sm light fs-4"
-                        @click="updateOrderStatus(order._id, 'on Delivery')"
-                      >
-                        On Delivery
-                      </button>
-                      <button
-                        class="btn-danger btn btn-sm light fs-4"
-                        @click="updateOrderStatus(order._id, 'cancelled')"
-                      >
-                        Cancelled
-                      </button>
-                    </div>
+                  <div v-for="ticket in order.tickets" :key="ticket._id">
+                    {{ ticket.name }} x {{ ticket.quantity }}
                   </div>
                 </td>
               </tr>
@@ -160,7 +57,9 @@
             class="pagination-btn"
             :disabled="currentPage === 1"
             @click="prevPage"
-          >Previous</button>
+          >
+            Previous
+          </button>
           <button
             v-for="page in totalPages"
             :key="page"
@@ -174,7 +73,9 @@
             class="pagination-btn"
             :disabled="currentPage === totalPages"
             @click="nextPage"
-          >Next</button>
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>
@@ -183,86 +84,41 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-
+import axios from "axios";
 export default {
   data() {
     return {
       selectedStatus: "", // Selected filter status
       searchQuery: "", // Search query
       currentPage: 1, // Current page number
-      rowsPerPage: 10 // Number of rows per page
+      rowsPerPage: 10, // Number of rows per page
+      orders: [],
+      totalPrice: 0,
     };
   },
   computed: {
-    userAddresses() {
-      const userAddresses = {};
-      const addresses = this.$store.getters.addresses;
-      const ownerId = this.order && this.order.owner;
-
-      if (ownerId) {
-        for (const address of addresses) {
-          if (address.user === ownerId) {
-            userAddresses[ownerId] = address;
-            break; // Stop the loop after finding the matching address
-          }
-        }
-      }
-
-      return userAddresses;
-    },
-
-    orderOwnerNames() {
-      const orderOwnerNames = {};
-      const users = this.$store.getters.getUsers;
-      for (const user of users) {
-        orderOwnerNames[user._id] = user.name;
-      }
-      return orderOwnerNames;
-    },
-    ...mapGetters(["getOrders", "addresses"]),
-    filteredOrders() {
-      // Filter orders based on selected status and search query
-      return this.getOrders.filter(order => {
-        const statusMatch = this.selectedStatus
-          ? order.status.toLowerCase() === this.selectedStatus.toLowerCase()
-          : true;
-        const searchMatch = this.searchQuery
-          ? order._id.toLowerCase().includes(this.searchQuery.toLowerCase())
-          : true;
-        return statusMatch && searchMatch;
-      });
-    },
-    paginatedOrders() {
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
-      const endIndex = startIndex + this.rowsPerPage;
-      return this.filteredOrders.slice(startIndex, endIndex);
-    },
-    totalPages() {
-      return Math.ceil(this.filteredOrders.length / this.rowsPerPage);
-    }
+    ...mapGetters(["getToken"]),
   },
   mounted() {
-    this.$store.dispatch("fetchOrders");
-    this.fetchAddresses();
+    axios
+      .get("https://event-ticket-qa70.onrender.com/api/orders", {
+        headers: {
+          Authorization: `Bearer ${this.getToken}`,
+        },
+      })
+      .then((response) => {
+        this.orders = response.data.orders;
+        // const total = this.orders.reduce((sum, order) => sum + order.price, 0);
+        // this.totalPrice = total;
+
+        console.log("Orders", this.orders);
+        //  console.log("Total price:", this.totalPrice);
+      })
+      .catch((error) => {
+        console.error("Error fetching orders:", error.response?.data || error);
+      });
   },
   methods: {
-    getUserAddress(userId) {
-      const addresses = this.$store.getters.addresses;
-      const userAddress = addresses.find(address => address.user === userId);
-      return userAddress || null;
-    },
-    ...mapActions(["updateOrderStatus", "fetchAddresses"]),
-    updateOrderStatus(orderId, status) {
-      // Dispatch the updateOrderStatus action from the Vuex store
-      this.$store
-        .dispatch("updateOrderStatus", { orderId, status })
-        .then(() => {
-        //  console.log("Order status updated successfully.");
-        })
-        .catch(error => {
-          console.error("Error updating order status:", error);
-        });
-    },
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
@@ -278,8 +134,8 @@ export default {
     },
     applyFilters() {
       this.currentPage = 1; // Reset to the first page when applying filters
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -331,7 +187,7 @@ export default {
 }
 
 .pagination button.active {
-  background-color: #007bff;
+  background-color: #f4a213;
   color: #fff;
 }
 

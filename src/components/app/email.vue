@@ -137,19 +137,13 @@
 </template>
 
 <script>
-import Sent from "./email/sent.vue";
-import Inbox from "./email/inbox.vue";
-import Important from "./email/important.vue";
-import Draft from "./email/draft.vue";
-import Trash from "./email/trash.vue";
+
+//import Trash from "./email/trash.vue";
 
 export default {
   components: {
-    Sent,
-    Inbox,
-    Important,
-    Draft,
-    Trash
+
+  //  Trash
   },
   data() {
     return {

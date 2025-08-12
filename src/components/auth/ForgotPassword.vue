@@ -57,7 +57,7 @@ export default {
   methods: {
     async handleSubmit() {
       const response = await axios
-        .post("http://localhost:5000/api/auth/forgotPassword", {
+        .post("https://event-ticket-qa70.onrender.com/api/auth/forgotPassword", {
           email: this.email
         })
         .then(response => {

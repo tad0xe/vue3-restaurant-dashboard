@@ -2,9 +2,9 @@
   <div>
     <div
       id="user-activity"
-      class="card"
+      class=""
     >
-      <div class="card-header border-0 pb-0 d-sm-flex d-block">
+      <div class="text-start border-0 pb-0 d-sm-flex d-block">
         <div>
           <h4 class="card-title mb-1">Customer Map</h4>
           <small class="mb-0">Lorem Ipsum is simply dummy text of the printing</small>

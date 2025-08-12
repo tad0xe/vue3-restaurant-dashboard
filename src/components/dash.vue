@@ -1,5 +1,5 @@
 <template>
-  <div class="nr">
+  <div class="" style="background-color: #fff">
     <div
       class="deznav sidenav"
       id="mySidenav"
@@ -8,7 +8,7 @@
       <!-- Navigation Bar -->
       <div class="deznav-scroll pt-2">
         <ul
-          class="metismenu pt-5"
+          class="metismenu "
           id="menu"
         >
           <!-- Dashboard -->
@@ -42,7 +42,7 @@
                 </a>
               </li>
               <li>
-                <a @click="onClickHomTab">
+                <a @click="onClickHomTab" class="d-none">
                   <div :class="{
                     'text-blue': isAccountHomVisible,
                     grey: !isAccountHomVisible,
@@ -52,7 +52,7 @@
                 </a>
               </li>
               <li>
-                <a @click="onClickWalletTab()">
+                <a @click="onClickWalletTab()" class="d-none">
                   <div :class="{
                     'text-blue': isAnalyticsVisible,
                     grey: !isAnalyticsVisible,
@@ -72,7 +72,7 @@
                 </a>
               </li>
               <li>
-                <a @click="onClickCustomerTab()">
+                <a @click="onClickCustomerTab()" class="d-none">
                   <div :class="{
                     'text-blue white': isCustomerVisible,
                     grey: !isCustomerVisible,
@@ -105,19 +105,19 @@
                 'text-blue': isCalenderVisible,
                 grey: !isCalenderVisible,
               }">
-                <a @click="onClickCalenderTab">Calendar</a>
+                <a @click="onClickBankTab">Bank Info</a>
               </li>
               <li :class="{
                 'text-blue': isProductVisible,
                 grey: !isProductVisible,
               }">
-                <a @click="onClickProductTab">Product</a>
+                <a @click="onClickProductTab">My Event</a>
               </li>
               <li :class="{
                 'text-blue': isAddProductVisible,
                 grey: !isAddProductVisible,
               }">
-                <a @click="onClickAddProductTab">Add Product</a>
+                <a @click="onClickAddProductTab">Add Event</a>
               </li>
             </ul>
           </li>
@@ -136,13 +136,13 @@
     </a>
     <div class="dropdown-menu" :class="{ 'show': isDropdownOpen }">
       <a class="dropdown-item" @click="onClickHomeTab">Dashboard</a>
-      <a class="dropdown-item" @click="onClickHomTab">Reviews</a>
-      <a class="dropdown-item" @click="onClickWalletTab">Analytics</a>
+      <a class="dropdown-item d-none" @click="onClickHomTab">Reviews</a>
+      <a class="dropdown-item d-none" @click="onClickWalletTab">Analytics</a>
       <a class="dropdown-item" @click="onClickOrderTab">Order List</a>
-      <a class="dropdown-item" @click="onClickCustomerTab">General Customers</a>
-      <a class="dropdown-item" @click="onClickCalenderTab">Calendar</a>
-      <a class="dropdown-item" @click="onClickProductTab">Product</a>
-      <a class="dropdown-item" @click="onClickAddProductTab">Add Product</a>
+      <a class="dropdown-item d-none" @click="onClickCustomerTab">General Customers</a>
+      <a class="dropdown-item" @click="onClickBankTab">Bank Info</a>
+      <a class="dropdown-item" @click="onClickProductTab">My Event</a>
+      <a class="dropdown-item" @click="onClickAddProductTab">Add Event</a>
     </div>
   </div>
 </div>
@@ -197,7 +197,7 @@ import Customer from "./dashboard/customers.vue";
 import Orders from "./dashboard/orderlist.vue";
 import Profile from "./app/profile.vue";
 import Compose from "./app/email.vue";
-import Calender from "./app/calender.vue";
+import Calender from "./app/bank.vue";
 import Product from "./app/product.vue";
 import addProduct from "./app/addProduct.vue";
 
@@ -378,14 +378,14 @@ export default {
         })
         .catch(err => {});
     },
-    onClickCalenderTab() {
+    onClickBankTab() {
       this.hideAll();
       this.isCalenderVisible = true;
       this.mobileTab = "Calendar";
       this.$router
         .push({
           query: {
-            activeTab: "calender"
+            activeTab: "bank"
           }
         })
         .catch(err => {});
@@ -430,8 +430,8 @@ export default {
         this.onClickProfileTab();
       } else if (this.mobileTab == "email") {
         this.onClickEmailComposeTab();
-      } else if (this.mobileTab == "calender") {
-        this.onClickCalenderTab();
+      } else if (this.mobileTab == "bank") {
+        this.onClickBankTab();
       } else if (this.mobileTab === "Product") {
         this.onClickProductTab();
       } else if (this.mobileTab === "Add Product") {
@@ -454,8 +454,8 @@ export default {
           this.onClickProfileTab();
         } else if (this.$route.query.activeTab == "email") {
           this.onClickEmailComposeTab();
-        } else if (this.$route.query.activeTab == "calender") {
-          this.onClickCalenderTab();
+        } else if (this.$route.query.activeTab == "bank") {
+          this.onClickBankTab();
         } else if (this.$route.query.activeTab == "product") {
           this.onClickProductTab();
         } else if (this.$route.query.activeTab == "add-product") {

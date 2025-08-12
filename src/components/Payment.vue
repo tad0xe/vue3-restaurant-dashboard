@@ -1,365 +1,263 @@
 <template>
-  <div>
-    <div class="content-body">
-      <div class="container-fluid">
-        <div class="row page-titles mx-0">
-          <div class="col-sm-6 p-md-0">
-            <div class="welcome-text">
-              <h4>Hi, welcome back!</h4>
+  <div class="container my-5">
+    <div class="ticket-footer d-block d-md-none p-2">
+      <div
+        class="text-white d-flex justify-content-between align-items-center p-3 rounded-3 mx-3 mb-3"
+        style="background-color: #047143"
+      >
+        <span class="fw-bold fs-5">
+          Total: ₦{{ cartTotal.toLocaleString() }}</span
+        >
+        <button
+          class="btn btn-primary:hover btn-primary fw-semibold px-4"
+          @click="nextStep"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
 
-            </div>
+    <div class="row">
+      <!-- Step Progress Bar -->
+
+      <!-- Left column: steps -->
+
+      <div class="col-md-8">
+        <!-- Progress Bar -->
+        <div class="stepper mb-5 position-relative">
+          <!-- Progress Line -->
+          <div class="progress-line">
+            <div
+              class="progress-fill"
+              :style="{ width: (currentStep / (steps.length - 1)) * 100 + '%' }"
+            ></div>
           </div>
-          <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="javascript:void(0)">Shop</a></li>
-              <li class="breadcrumb-item active"><a href="javascript:void(0)">Checkout</a></li>
-            </ol>
+
+          <!-- Steps -->
+          <div
+            v-for="(stepLabel, index) in steps"
+            :key="index"
+            class="currentStep text-center"
+            :class="{
+              active: currentStep === index,
+              completed: index < currentStep,
+            }"
+          >
+            <div class="circle">
+              <span v-if="index < currentStep">✔</span>
+              <span v-else>{{ index + 1 }}</span>
+            </div>
+            <div class="label">{{ stepLabel }}</div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-xl-12">
-            <div class="card border-0">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-4 order-md-2 mb-4">
-                    <h4 class="d-flex justify-content-between align-items-center mb-3">
-                      <span class="text-muted">Your cart</span>
-                      <span class="badge badge-primary badge-pill">3</span>
-                    </h4>
-                    <ul class="list-group mb-3">
-                      <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                          <h6 class="my-0">Product name</h6>
-                          <small class="text-muted">Brief description</small>
-                        </div>
-                        <span class="text-muted">$12</span>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                          <h6 class="my-0">Second product</h6>
-                          <small class="text-muted">Brief description</small>
-                        </div>
-                        <span class="text-muted">$8</span>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                          <h6 class="my-0">Third item</h6>
-                          <small class="text-muted">Brief description</small>
-                        </div>
-                        <span class="text-muted">$5</span>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between active">
-                        <div class="text-white">
-                          <h6 class="my-0 text-white">Promo code</h6>
-                          <small>EXAMPLECODE</small>
-                        </div>
-                        <span class="text-white">-$5</span>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between">
-                        <span>Total (USD)</span>
-                        <strong>$20</strong>
-                      </li>
-                    </ul>
 
-                    <form>
-                      <div class="input-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Promo code"
-                        >
-                        <div class="input-group-append">
-                          <button
-                            type="submit"
-                            class="btn btn-primary"
-                          >Redeem</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="col-md-8 order-md-1">
-                    <h4 class="mb-3">Billing address</h4>
-                    <form
-                      class="needs-validation"
-                      novalidate=""
-                    >
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label for="firstName">First name</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="firstName"
-                            placeholder=""
-                            value=""
-                            required=""
-                          >
-                          <div class="invalid-feedback">
-                            Valid first name is required.
-                          </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="lastName">Last name</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="lastName"
-                            placeholder=""
-                            value=""
-                            required=""
-                          >
-                          <div class="invalid-feedback">
-                            Valid last name is required.
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="mb-3">
-                        <label for="username">Username</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">@</span>
-                          </div>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="username"
-                            placeholder="Username"
-                            required=""
-                          >
-                          <div
-                            class="invalid-feedback"
-                            style="width: 100%;"
-                          >
-                            Your username is required.
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="mb-3">
-                        <label for="email">Email <span class="text-muted">(Optional)</span></label>
-                        <input
-                          type="email"
-                          class="form-control"
-                          id="email"
-                          placeholder="you@example.com"
-                        >
-                        <div class="invalid-feedback">
-                          Please enter a valid email address for shipping updates.
-                        </div>
-                      </div>
-
-                      <div class="mb-3">
-                        <label for="address">Address</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="address"
-                          placeholder="1234 Main St"
-                          required=""
-                        >
-                        <div class="invalid-feedback">
-                          Please enter your shipping address.
-                        </div>
-                      </div>
-
-                      <div class="mb-3">
-                        <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="address2"
-                          placeholder="Apartment or suite"
-                        >
-                      </div>
-
-                      <div class="row">
-                        <div class="col-md-5 mb-3">
-                          <label for="country">Country</label>
-                          <select
-                            class="d-block w-100 form-control"
-                            id="country"
-                            required=""
-                          >
-                            <option value="">Choose...</option>
-                            <option>United States</option>
-                          </select>
-                          <div class="invalid-feedback">
-                            Please select a valid country.
-                          </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                          <label for="state">State</label>
-                          <select
-                            class="d-block form-control w-100"
-                            id="state"
-                            required=""
-                          >
-                            <option value="">Choose...</option>
-                            <option>California</option>
-                          </select>
-                          <div class="invalid-feedback">
-                            Please provide a valid state.
-                          </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                          <label for="zip">Zip</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="zip"
-                            placeholder=""
-                            required=""
-                          >
-                          <div class="invalid-feedback">
-                            Zip code required.
-                          </div>
-                        </div>
-                      </div>
-                      <hr class="mb-4">
-                      <div class="custom-control custom-checkbox mb-2">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="same-address"
-                        >
-                        <label
-                          class="custom-control-label"
-                          for="same-address"
-                        >Shipping address
-                          is
-                          the same as
-                          my billing address</label>
-                      </div>
-                      <div class="custom-control custom-checkbox mb-2">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="save-info"
-                        >
-                        <label
-                          class="custom-control-label"
-                          for="save-info"
-                        >Save this
-                          information
-                          for next
-                          time</label>
-                      </div>
-                      <hr class="mb-4">
-
-                      <h4 class="mb-3">Payment</h4>
-
-                      <div class="d-block my-3">
-                        <div class="custom-control custom-radio mb-2">
-                          <input
-                            id="credit"
-                            name="paymentMethod"
-                            type="radio"
-                            class="custom-control-input"
-                            checked=""
-                            required=""
-                          >
-                          <label
-                            class="custom-control-label"
-                            for="credit"
-                          >Credit card</label>
-                        </div>
-                        <div class="custom-control custom-radio mb-2">
-                          <input
-                            id="debit"
-                            name="paymentMethod"
-                            type="radio"
-                            class="custom-control-input"
-                            required=""
-                          >
-                          <label
-                            class="custom-control-label"
-                            for="debit"
-                          >Debit card</label>
-                        </div>
-                        <div class="custom-control custom-radio mb-2">
-                          <input
-                            id="paypal"
-                            name="paymentMethod"
-                            type="radio"
-                            class="custom-control-input"
-                            required=""
-                          >
-                          <label
-                            class="custom-control-label"
-                            for="paypal"
-                          >Paypal</label>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label for="cc-name">Name on card</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="cc-name"
-                            placeholder=""
-                            required=""
-                          >
-                          <small class="text-muted">Full name as displayed on card</small>
-                          <div class="invalid-feedback">
-                            Name on card is required
-                          </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="cc-number">Credit card number</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="cc-number"
-                            placeholder=""
-                            required=""
-                          >
-                          <div class="invalid-feedback">
-                            Credit card number is required
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-3 mb-3">
-                          <label for="cc-expiration">Expiration</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="cc-expiration"
-                            placeholder=""
-                            required=""
-                          >
-                          <div class="invalid-feedback">
-                            Expiration date required
-                          </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                          <label for="cc-expiration">CVV</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="cc-cvv"
-                            placeholder=""
-                            required=""
-                          >
-                          <div class="invalid-feedback">
-                            Security code required
-                          </div>
-                        </div>
-                      </div>
-                      <hr class="mb-4">
-                      <button
-                        class="btn btn-primary btn-lg btn-block"
-                        type="submit"
-                      >Continue to
-                        checkout</button>
-                    </form>
-                  </div>
+        <!-- Step 1: Ticket Selection -->
+        <!-- Place this inside your Vue template -->
+        <div v-if="currentStep === 0" class="ticket-section text-start">
+          <h3>🎟️ Choose Tickets</h3>
+          <p class="alert alert-warning">
+            We've reserved your ticket. Please complete checkout within
+            {{ timer }} to secure your tickets.
+          </p>
+          <div
+            class="ticket-card"
+            v-for="product in getCart"
+            :key="product._id"
+          >
+            <!-- Loop through tickets inside each product -->
+            <div
+              v-for="ticket in product.event.tickets"
+              :key="ticket._id"
+              class=""
+            >
+              <div class="ticket-content d-flex justify-content-between">
+                <div>
+                  <h5>{{ ticket.name }}</h5>
+                  <p class="price">
+                    ₦{{
+                      (
+                        ticket.price * (ticket.selectedQuantity || 1)
+                      ).toLocaleString()
+                    }}
+                  </p>
+                  <p class="access">Quantity: {{ ticket.quantity }}</p>
                 </div>
+
+                <!-- Optional: Add a quantity selector if needed -->
+                <select
+                  class="ticket-select mt-2"
+                  v-model.number="ticket.selectedQuantity"
+                >
+                  <option
+                    v-for="n in ticket.quantity + 1"
+                    :key="n"
+                    :value="n - 1"
+                  >
+                    {{ n - 1 }}
+                  </option>
+                </select>
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Step 2: Contact Info -->
+        <div v-else-if="currentStep === 1" class="text-start">
+          <h3>📇 Contact Information</h3>
+          <p class="alert alert-warning">
+            We've reserved your ticket. Please complete checkout within
+            {{ timer }} to secure your tickets.
+          </p>
+          <form ref="myForm" @submit.prevent="">
+            <div class="row mb-3">
+              <div class="col">
+                <label class="form-label">First Name *</label>
+                <input
+                  v-model="contact.firstName"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col">
+                <label class="form-label">Last Name *</label>
+                <input
+                  v-model="contact.lastName"
+                  type="text"
+                  class="form-control"
+                  required
+                />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email Address *</label>
+              <input
+                v-model="contact.email"
+                type="email"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Confirm Email Address *</label>
+              <input
+                v-model="contact.confirmEmail"
+                type="email"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone Number *</label>
+              <div class="input-group">
+                <span class="input-group-text">+234</span>
+                <input
+                  v-model="contact.phone"
+                  type="tel"
+                  class="form-control"
+                  required
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Step 3: Payment -->
+        <div v-else-if="currentStep === 2" class="text-start">
+          <h3>💳 Payment Options</h3>
+
+          <p class="alert alert-warning">
+            We've reserved your ticket. Please complete checkout within
+            {{ timer }} to secure your tickets.
+          </p>
+
+          <div class="form-check mb-2">
+            <input
+              class="form-check-input"
+              type="radio"
+              v-model="paymentMethod"
+              value="card"
+              id="payCard"
+            />
+            <label class="form-check-label" for="payCard"
+              >Pay with Paystack</label
+            >
+            <form @submit.prevent="initializePayment">
+              <div class="mb-3">
+                <label>Email</label>
+                <input
+                  :value="getContactInfo.email"
+                  type="email"
+                  class="form-control"
+                  readonly
+                />
+              </div>
+
+              <button type="submit" class="btn btn-success">
+                Pay Now ₦{{ getCartTotal.toLocaleString() }}
+              </button>
+            </form>
+          </div>
+
+          <div class="form-check mb-2">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              v-model="termsAccepted"
+              id="terms"
+            />
+            <label class="form-check-label" for="terms">
+              I accept the <a href="#">234Africa Terms and Conditions</a>,
+              <a href="#">Refund Policy</a> and <a href="#">Privacy Policy</a>.
+            </label>
+          </div>
+        </div>
+        <div class="text-center mt-4 d-flex justify-content-between">
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="prevStep"
+            :disabled="currentStep === 0"
+          >
+            Back
+          </button>
+          <button
+            v-if="currentStep < steps.length - 1"
+            type="button"
+            class="btn btn-primary btn-primary:hover"
+            @click="nextStep"
+          >
+            Next
+          </button>
+          <button
+            v-else
+            type="submit"
+            @click="getTicket()"
+            class="btn btn-primary btn-primary:hover"
+            v-if="getCart[0]?.price === null"
+          >
+            Create Event
+          </button>
+        </div>
+        <spinner v-if="spinner" />
+      </div>
+
+      <!-- Right column: Summary -->
+      <div class="col-md-4 text-start d-none d-md-block">
+        <div class="p-4 bg-light border-start">
+          <h5>Summary</h5>
+          <div v-if="selectedTickets.length" class="mt-4">
+            <h5>🎟️ Selected Tickets:</h5>
+            <ul>
+              <li v-for="(ticket, index) in selectedTickets" :key="index">
+                {{ ticket.name }} x {{ ticket.quantity }}
+              </li>
+            </ul>
+          </div>
+          <div class="text-muted small"  v-if="getCart[0]?.price !== null">
+            Service Charge (7.5%): ₦{{ serviceCharge }}
+          </div>
+          <span class="fw-bold fs-5"> Total: ₦{{ getCartTotal }}</span>
         </div>
       </div>
     </div>
@@ -367,114 +265,398 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from "vuex";
 import axios from "axios";
-import { StripeElementCard } from "@vue-stripe/vue-stripe";
-
-import { mapGetters } from "vuex";
+import paystack from "vue-paystack";
+import QrcodeVue from "qrcode.vue";
+import spinner from "./spinner.vue";
+import { ref } from "vue";
 export default {
   components: {
-    StripeElementCard
+    paystack,
+    QrcodeVue,
+    spinner,
   },
   data() {
     return {
-      publishableKey:
-        "pk_test_51KGqWkHCcyZvTrDrTmAbtZkngRWbP0FCvV3bgZnz8GXuleqD1fo1lRa5seDD3qKsk0irYLumaH3SeI5cILED3pwq00NR023dNZ",
-      charge: null,
-      message: null,
-      name: "",
-      email: "",
-      zipcode: "",
-      state: "",
-      city: "",
-      fullname: "",
-      streetAddress: ""
+      currentStep: 0,
+      timer: "10:00",
+      spinner: false,
+      reference: "",
+      showQRCode: false,
+      countdown: null,
+      full_name: "",
+      publicKey: "pk_test_39500fe5625254b064b82558ae701fce46e5f2d1", // Replace with your real key
+      steps: ["Tickets", "Contact", "Payment"],
+      tickets: [],
+      contact: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        confirmEmail: "",
+        phone: "",
+      },
+      paymentMethod: "",
+      termsAccepted: false,
+      subscribe: false,
     };
   },
-  created() {
-    //user is not authorized
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    }
-  },
-  mounted() {
-    const token = localStorage.getItem("token");
-    axios
-      .get("https://restaurant-n54j.onrender.com/api/auth/user", {
-        headers: {
-          Authorization: "Bearer" + token,
-          "x-access-token": token
-        }
-      })
-      .then(res => {
-        this.name = res.data.user.name;
-        this.email = res.data.user.email;
-        this.streetAddress = res.data.user.address.streetAddress;
-        this.city = res.data.user.address.city;
-        this.state = res.data.user.address.state;
-        this.zipcode = res.data.user.address.zipCode;
-        this.fullname = res.data.user.address.fullName;
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  },
   computed: {
-    ...mapGetters([
-      "getShippingPrice",
-      "getEstimatedDelivery",
-      "getCartLength",
-      "getCart",
-      "getCartTotalPriceWithShipping",
-      "getEstimatedDelivery"
-    ])
-  },
-  methods: {
-    submit() {
-      // this will trigger the process
-      this.$refs.elementRef.submit();
+    serviceCharge() {
+      return (this.getCartTotal * 0.075).toFixed(2);
     },
-    tokenCreated(token) {
-      //  console.log(token);
-      this.token = token;
-      this.charge = {
-        source: token.id,
-        amount: 4000
-      };
-      this.sendTokenToServer(this.charge);
+    email() {
+      return this.getContactInfo.email;
+    },
+    amount() {
+      return this.cartTotal;
+    },
+    steps() {
+      const hasPrice = this.getCart[0]?.price !== null;
+
+      return hasPrice
+        ? ["Tickets", "Contact", "Payment"]
+        : ["Tickets", "Contact"];
+    },
+    ...mapGetters([
+      "getCart",
+      "getContactInfo",
+      "getSelectedTickets",
+      "getCartTotal",
+    ]),
+    cartTotal() {
+      return this.getCart.reduce((sum, product) => {
+        const ticketTotal = product.event.tickets.reduce((innerSum, ticket) => {
+          return (
+            innerSum + (ticket.selectedQuantity || 0) * (ticket.price || 0)
+          );
+        }, 0);
+        return sum + ticketTotal;
+      }, 0);
+    },
+    selectedTickets() {
+      return this.getCart.flatMap((product) => {
+        return (
+          product.event?.tickets
+            ?.filter((ticket) => ticket.selectedQuantity > 0)
+            .map((ticket) => ({
+              name: ticket.name,
+              quantity: ticket.selectedQuantity,
+            })) || []
+        );
+      });
     },
 
-    sendTokenToServer(charge, response) {
-      var request = {
-        totalPrice: this.getCartTotalPriceWithShipping,
-        cart: this.getCart,
-        estimatedDelivery: this.getEstimatedDelivery
-      };
-      const token = localStorage.getItem("token");
-      //console.log(token);
-      axios
-        .post(`https://restaurant-n54j.onrender.com/api/pay`, request, {
-          headers: {
-            Authorization: "Bearer" + token,
-            "x-access-token": token
+    canCheckout() {
+      return this.paymentMethod && this.termsAccepted;
+    },
+  },
+  watch: {
+    currentStep() {
+      this.updateProgressLine();
+    },
+  },
+  methods: {
+    ...mapMutations(["setSelectedTickets"]),
+    generateReference() {
+      let text = "";
+      const possible =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      for (let i = 0; i < 10; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return text;
+    },
+    extractSelectedTickets() {
+      const selected = this.getCart.flatMap((product) => {
+        return (
+          product.event?.tickets
+            ?.filter((ticket) => ticket.selectedQuantity > 0)
+            .map((ticket) => ({
+              name: ticket.name,
+              quantity: ticket.selectedQuantity,
+            })) || []
+        );
+      });
+
+      // Save to Vuex
+      this.setSelectedTickets(selected);
+    },
+    async initializePayment() {
+      try {
+        this.spinner = true; // Show spinner while processing
+        const response = await axios.post(
+          "https://event-ticket-qa70.onrender.com/api/initialize",
+          {
+            email: this.email,
+            amount: this.amount,
           }
-        })
-        .then(res => {
-        //  console.log(res);
-          const message = res.data.message;
-          this.$notify(`working`);
-          this.$store.commit("clearCart");
-        })
-        .catch(err => {
-          const message = err.response.data.message;
-          this.$swal("Oh oo!", `${message}`, "error");
-        });
-    }
-  }
+        );
+        console.log(response.data);
+
+        const { authorization_url, reference } = response.data.data;
+        // Save reference for verification later (optional)
+        localStorage.setItem("paystack_reference", reference);
+        this.spinner = false; // Hide spinner after processing
+
+        // Redirect to Paystack payment page
+        window.location.href = authorization_url;
+      } catch (error) {
+        alert("Payment initialization failed");
+        console.error(error);
+      }
+    },
+    async getTicket() {
+      try {
+        this.reference = this.generateReference(); // generate and store
+        localStorage.setItem("paystack_reference", this.reference);
+        this.spinner = true; // Show spinner while processing
+
+        const payload = {
+          reference: this.reference,
+          userId: this.getCart[0]?.user,
+          title: this.getCart[0]?.title,
+          contact: {
+            email: this.getContactInfo.email,
+            phone: this.getContactInfo.phone,
+          },
+          tickets: this.getSelectedTickets,
+          price: this.getCartTotal,
+        };
+
+        console.log("Sending order info:", payload);
+        const res = await axios.post(
+          "https://event-ticket-qa70.onrender.com/api/order",
+          payload
+        );
+        this.spinner = false; // Hide spinner after processing
+        alert("ticket has been sent to your email");
+        //this.showQRCode = true;
+        this.$refs.myForm.reset();
+        this.$router.push({ name: "home" });
+        console.log("Order info sent:", res.data);
+      } catch (err) {
+        console.error("Failed to send order info:", err);
+      }
+    },
+
+    processPayment: () => {
+      window.alert("Payment recieved");
+    },
+    close: () => {
+      console.log("You closed checkout page");
+    },
+    updateProgressLine() {
+      const wrapper = this.$el.querySelector(".stepper-wrapper");
+      if (wrapper) {
+        const value = this.currentStep / (this.steps.length - 1);
+        wrapper.style.setProperty("--progress", value);
+      }
+    },
+    nextStep() {
+      this.$store.dispatch("setContactInfo", this.contact);
+      const selected = this.getCart.flatMap((product) =>
+        product.event.tickets
+          .filter((ticket) => ticket.selectedQuantity > 0)
+          .map((ticket) => ({
+            name: ticket.name,
+            quantity: ticket.selectedQuantity,
+          }))
+      );
+
+      // Save to Vuex
+      this.$store.commit("setSelectedTickets", selected);
+      if (this.currentStep < this.steps.length - 1) this.currentStep++;
+    },
+    prevStep() {
+      if (this.currentStep > 0) this.currentStep--;
+    },
+
+    checkout() {
+      alert("✅ Checkout successful!");
+    },
+    startTimer() {
+      let totalSeconds = 600;
+      this.countdown = setInterval(() => {
+        totalSeconds--;
+        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+        const seconds = String(totalSeconds % 60).padStart(2, "0");
+        this.timer = `${minutes}:${seconds}`;
+        if (totalSeconds <= 0) {
+          clearInterval(this.countdown);
+          alert("⏰ Time expired! Please restart.");
+          location.reload();
+        }
+      }, 1000);
+    },
+  },
+  mounted() {
+    this.startTimer();
+
+    this.updateProgressLine();
+  },
+  beforeUnmount() {
+    clearInterval(this.countdown);
+  },
 };
 </script>
 
 <style scoped>
-.card {
-  border-radius: 0.75rem;
+.qr-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.ticket-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  padding: 10px 20px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 9999;
+}
+.ticket-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.ticket-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.ticket-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-info h5 {
+  font-size: 1.1rem;
+  margin: 0 0 5px;
+  color: #2c3e50;
+}
+
+.price {
+  font-weight: bold;
+  color: #e74c3c;
+  margin: 0 0 5px;
+}
+
+.access {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+.ticket-select {
+  padding: 8px 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.stepper-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 0 15px;
+}
+
+.stepper {
+  position: relative;
+  align-items: center;
+  display: flex;
+}
+
+.currentStep {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #adb5bd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  background-color: white;
+  color: #adb5bd;
+  font-weight: bold;
+}
+
+.currentStep.active .circle {
+  border-color: #f4a213;
+  background-color: #f4a213;
+  color: white;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.currentStep.completed .circle {
+  background-color: #f4a213;
+  color: white;
+  border-color: #f4a213;
+}
+
+.label {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.currentStep.active .label,
+.currentStep.completed .label {
+  color: #f4a213;
+}
+
+/* Progress line behind steps */
+.progress-line {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #dee2e6;
+  z-index: 1;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #f4a213;
+  width: 0%;
+  transition: width 0.4s ease-in-out;
 }
 </style>

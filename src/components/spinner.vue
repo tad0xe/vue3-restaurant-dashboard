@@ -3,6 +3,7 @@
   <div class="double-bounce1"></div>
   <div class="double-bounce2"></div>
 </div>
+
 </template>
 
 <style>
@@ -19,7 +20,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color:blue;
+  background-color:#047143;
   opacity: 0.6;
   position: absolute;
   top: 0;
@@ -49,3 +50,4 @@
   }
 }
 </style>
+

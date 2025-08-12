@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="card">
-      <div class="card-header border-0 pb-0 d-sm-flex d-block">
+    <div class="">
+      <div class="text-start border-0 pb-0 d-sm-flex d-block">
         <div class="header-content">
           <h4 class="card-title mb-1">Sales</h4>
           <small class="mb-0">Lorem ipsum dolor sit amet, consectetur</small>
@@ -18,7 +18,7 @@
             >
               {{ filter }}
             </button>
-            <div class="dropdown-menu" aria-labelledby="filterDropdown">
+            <div class="dropdown-menu" style="color: #f4a213;" aria-labelledby="filterDropdown">
               <a
                 class="dropdown-item"
                 :class="{ active: filter === 'daily' }"
@@ -38,7 +38,7 @@
           </div>
         </div>
       </div>
-      <div class="card-body">
+      <div class="">
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="user" role="tabpanel">
             <div id="chart"></div>

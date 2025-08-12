@@ -90,8 +90,9 @@ const actions = {
       const headers = {
         Authorization: code,
       };
+      console.log('Authorization header:', headers.Authorization);
 
-      const response = await axiosInstance.post('https://restaurant-n54j.onrender.com/api/auth/google', null, { headers });
+      const response = await axiosInstance.post('https://event-ticket-qa70.onrender.com/api/auth/google', null, { headers });
       const userDetails = response.data;
 
       commit('SET_USER_DETAILS', userDetails);

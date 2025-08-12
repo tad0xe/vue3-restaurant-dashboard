@@ -51,7 +51,7 @@ export default {
           deliverInstructions: this.deliveryInstructions,
           securityCode: this.securityCode
         },
-        url: "https://restaurant-n54j.onrender.com/api/addresses",
+        url: "https://event-ticket-qa70.onrender.com/api/addresses",
 
         headers: {
           "Content-Type": "application/json",
